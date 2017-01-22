@@ -143,26 +143,4 @@ public class CalculationGUI extends JFrame implements ActionListener {
             }
         }
     }
-
-   /* @Override
-    public void focusGained(FocusEvent e) {
-        if (textNum1.getText().trim().equals(MyConstants.INPUT_NUMBER)){ //проверка, если текст в поле "введите число"
-            //тогда делаем текстовое поле пусто
-            textNum1.setText("");
-            //указываем что текст нашего введенного текста будет черным
-            textNum1.setForeground(Color.BLACK);
-        }
-    }
-
-    //метод когда фокус ушел из него
-    @Override
-    public void focusLost(FocusEvent e) {
-        if (textNum1.getText().trim().equals("")){ //проверяем если не было введено чисел
-            //тогда в текстовом поле показываем "введите число"
-            textNum1.setText(MyConstants.INPUT_NUMBER);
-            //и указываем цвет надписи
-            textNum1.setForeground(Color.GRAY);
-            //метод trim() удалает пробелы в начале и в конце строки
-        }
-    }*/
 }
