@@ -1,14 +1,15 @@
-package com.vlad.example.view_controller;
+package com.vlad.example.gui;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import com.vlad.example.MyConstants;
-import com.vlad.example.model.CalcOperations;
+import com.vlad.example.calc.CalcOperations;
 
 /**
  * Created by Влад on 07.11.2016.
