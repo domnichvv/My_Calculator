@@ -1,15 +1,14 @@
-package com.vlad.example.gui;
+package com.vlad.example.view_controller;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.io.IOException;
 
 import com.vlad.example.MyConstants;
-import com.vlad.example.calc.CalcOperations;
+import com.vlad.example.model.CalcOperations;
 
 /**
  * Created by Влад on 07.11.2016.
@@ -29,12 +28,12 @@ public class CalculationGUI extends JFrame implements ActionListener {
     private JTextField textNum1;
     private JTextField textNum2;
     private JTextField textResult;
-    private JTextField field;
 
     private Box horizontalLayoutLabelText, horizontalLayoutButtons, horizontalLayoutResult, verticalLayoutPanel;
 
     public CalculationGUI(){
         super(MyConstants.VIEW_SCREEN_TITLE);
+        super.setIconImage(new ImageIcon("calc2.png").getImage());
 
         setDefaultLookAndFeelDecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,15 +57,15 @@ public class CalculationGUI extends JFrame implements ActionListener {
         btnAdd = new JButton(MyConstants.VEIW_BUTTON_ADD);
         btnAdd.addActionListener(this);
         horizontalLayoutButtons.add(btnAdd);
-        horizontalLayoutButtons.add(Box.createHorizontalStrut(MyConstants.DISTANCE_BETWEEN_COMPONENTS));
+        horizontalLayoutButtons.add(Box.createHorizontalStrut(MyConstants.DISTANCE_BETWEEN_BUTTONS));
         btnSubstract = new JButton(MyConstants.VIEW_BUTTON_SUB);
         btnSubstract.addActionListener(this);
         horizontalLayoutButtons.add(btnSubstract);
-        horizontalLayoutButtons.add(Box.createHorizontalStrut(MyConstants.DISTANCE_BETWEEN_COMPONENTS));
+        horizontalLayoutButtons.add(Box.createHorizontalStrut(MyConstants.DISTANCE_BETWEEN_BUTTONS));
         btnMultiply = new JButton(MyConstants.VIEW_BUTTON_MULT);
         btnMultiply.addActionListener(this);
         horizontalLayoutButtons.add(btnMultiply);
-        horizontalLayoutButtons.add(Box.createHorizontalStrut(MyConstants.DISTANCE_BETWEEN_COMPONENTS));
+        horizontalLayoutButtons.add(Box.createHorizontalStrut(MyConstants.DISTANCE_BETWEEN_BUTTONS));
         btnDivide = new JButton(MyConstants.VIEW_BUTTON_DIV);
         btnDivide.addActionListener(this);
         horizontalLayoutButtons.add(btnDivide);
@@ -98,7 +97,7 @@ public class CalculationGUI extends JFrame implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e){
 
         //проверяем нажата ли была кнопка
         if (!(e.getSource() instanceof JButton)) {
@@ -111,43 +110,57 @@ public class CalculationGUI extends JFrame implements ActionListener {
         String button = e.getActionCommand();
 
         //далее парсим введеные строки из полей, превращая их в числа
-        final double a = Double.parseDouble(textNum1.getText());
-        final double b = Double.parseDouble(textNum2.getText());
+        try {
+            final double a = Double.parseDouble(textNum1.getText());
+            final double b = Double.parseDouble(textNum2.getText());
 
-        //определяем нажатую кнопку, производим вычисление и результат записываем в textResult
-
-        if (button.equals(MyConstants.VEIW_BUTTON_ADD)){
-            textResult.setText(String.valueOf(CalcOperations.add(a, b)));
+            //определяем нажатую кнопку, производим вычисление и результат записываем в textResult
+            if (button.equals(MyConstants.VEIW_BUTTON_ADD)){
+                textResult.setText(String.valueOf(CalcOperations.add(a, b)));
+            }
+            else if (button.equals(MyConstants.VIEW_BUTTON_SUB)){
+                textResult.setText(String.valueOf(CalcOperations.substract(a, b)));
+            }
+            else if (button.equals(MyConstants.VIEW_BUTTON_MULT)){
+                textResult.setText(String.valueOf(CalcOperations.multiply(a, b)));
+            }
+            else if (button.equals(MyConstants.VIEW_BUTTON_DIV)){
+                textResult.setText(String.valueOf(CalcOperations.divide(a, b)));
+            }
         }
-        else if (button.equals(MyConstants.VIEW_BUTTON_SUB)){
-            textResult.setText(String.valueOf(CalcOperations.substract(a, b)));
-        }
-        else if (button.equals(MyConstants.VIEW_BUTTON_MULT)){
-            textResult.setText(String.valueOf(CalcOperations.multiply(a, b)));
-        }
-        else if (button.equals(MyConstants.VIEW_BUTTON_DIV)){
-            textResult.setText(String.valueOf(CalcOperations.divide(a, b)));
+        catch (NumberFormatException e1){
+            if (textNum1.getText().equals("") && textNum2.getText().equals("")) {
+                textResult.setText(String.valueOf(MyConstants.VIEW_MASSEGE_DIALOG_NO_EMPTY_ALL_FIELD));
+            }
+            else if (textNum1.getText().equals("") || textNum2.getText().equals("")) {
+                textResult.setText(String.valueOf(MyConstants.VIEW_MASSEGE_DIALOG_EMPTY_ONE_FIELD));
+            }
+            else {
+                textResult.setText(String.valueOf(MyConstants.VIEW_MASSEGE_DIALOG_NO_LITERA));
+                textNum1.setText("");
+                textNum2.setText("");
+            }
         }
     }
-/*
-    @Override
+
+   /* @Override
     public void focusGained(FocusEvent e) {
-        if (field.getText().trim().equals(MyConstants.INPUT_NUMBER)){ //проверка, если текст в поле "введите число"
+        if (textNum1.getText().trim().equals(MyConstants.INPUT_NUMBER)){ //проверка, если текст в поле "введите число"
             //тогда делаем текстовое поле пусто
-            field.setText("");
+            textNum1.setText("");
             //указываем что текст нашего введенного текста будет черным
-            field.setForeground(Color.BLACK);
+            textNum1.setForeground(Color.BLACK);
         }
     }
 
     //метод когда фокус ушел из него
     @Override
     public void focusLost(FocusEvent e) {
-        if (field.getText().trim().equals("")){ //проверяем если не было введено чисел
+        if (textNum1.getText().trim().equals("")){ //проверяем если не было введено чисел
             //тогда в текстовом поле показываем "введите число"
-            field.setText(MyConstants.INPUT_NUMBER);
+            textNum1.setText(MyConstants.INPUT_NUMBER);
             //и указываем цвет надписи
-            field.setForeground(Color.GRAY);
+            textNum1.setForeground(Color.GRAY);
             //метод trim() удалает пробелы в начале и в конце строки
         }
     }*/
