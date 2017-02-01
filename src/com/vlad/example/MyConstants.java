@@ -3,9 +3,12 @@ package com.vlad.example;
 /**
  * Created by Влад on 09.11.2016.
  */
+
+/**
+ * Класс, в котором находятся константные переменные
+ */
 public class MyConstants {
 
-    public static final String INPUT_NUMBER = "введите число";
     public static final String VIEW_SCREEN_TITLE = "Калькулятор";
     public static final String VIEW_LABEL_NUM_1 = "Число 1";
     public static final String VIEW_LABEL_NUM_2 = "Число 2";
